@@ -2,6 +2,7 @@
 #include <android/native_window.h>
 #include <android/log.h>
 
+// Creates a window and fills the screen using software rendering (CPU)
 void fill_window(ANativeWindow* window) {
     if (!window) return;
 
@@ -19,16 +20,9 @@ void fill_window(ANativeWindow* window) {
     for (int y = 0; y < winH; y++) {
         uint32_t* row = (uint32_t*)((char*) buffer.bits + y * buffer.stride * 4);
         for (int x = 0; x < winW; x++) {
-            row[x] = 0xFF0000FF; // purple, RGBA
+            row[x] = 0xFF0000FF; // red, RGBA
         }
     }
 
     ANativeWindow_unlockAndPost(window);
-}
-
-void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize) {
-    // Hook the window creation callback
-    activity->callbacks->onNativeWindowCreated = [](ANativeActivity* act, ANativeWindow* window) {
-        fill_window(window);
-    };
 }
