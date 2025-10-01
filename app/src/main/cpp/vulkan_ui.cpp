@@ -3,44 +3,62 @@
 //
 
 #include <vulkan/vulkan.h>
+#include "vulkan/VulkanSetup.h"
 #include <vulkan/vulkan_android.h>
 #include <android/native_activity.h>
 #include <android/native_window.h>
 #include <android/log.h>
-#define LOG(...) __android_log_print(ANDROID_LOG_INFO, "NativeVulkan", __VA_ARGS__)
+#include <vector>
+#include <string>
+#include <cstring> // strcmp
+#include <limits>
 
-VkInstance instance;
-VkSurfaceKHR surface;
+void drawFrame();
 
-void fill_window_accelerated(ANativeWindow* window) {
-    // 1. Instance
-    VkApplicationInfo appInfo{};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Native Vulkan";
-    appInfo.apiVersion = VK_API_VERSION_1_0;
 
-    const char* extensions[] = {"VK_KHR_surface", "VK_KHR_android_surface"};
-    VkInstanceCreateInfo createInfo{};
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInfo.pApplicationInfo = &appInfo;
-    createInfo.enabledExtensionCount = 2;
-    createInfo.ppEnabledExtensionNames = extensions;
+void fill_window_accelerated(ANativeWindow *window) {
+    createInstance();
+    LOG("Inside vulkan_ui.cpp. Vulkan instance created!");
 
-    vkCreateInstance(&createInfo, nullptr, &instance);
+    createSurface(window);
+    LOG("Vulkan surface created!");
 
-    // 2. Android surface
-    VkAndroidSurfaceCreateInfoKHR surfaceInfo{};
-    surfaceInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
-    surfaceInfo.window = window;
 
-    vkCreateAndroidSurfaceKHR(instance, &surfaceInfo, nullptr, &surface);
-
-    LOG("Vulkan instance + surface created!");
+//    TODO() Not finished yet
+//    pickPhysicalDevice();
+//    LOG("Inside vulkan_ui.cpp. Physical device picked.");
+//
+//    createLogicalDevice();
+//    LOG("Inside vulkan_ui.cpp. Logical device created.");
+//
+//    createSwapchain();
+//    LOG("Inside vulkan_ui.cpp. Created Swapchain.");
+//
+//    createImageViews();
+//    LOG("Inside vulkan_ui.cpp. Created image views.");
+//
+//    createRenderPass();
+//    LOG("Inside vulkan_ui.cpp. Created render pass.");
+//
+//    createGraphicsPipeline();
+//    LOG("Inside vulkan_ui.cpp. Created graphics pipeline.");
+//
+//    createFramebuffers();
+//    LOG("Inside vulkan_ui.cpp. Created frame buffer.");
+//
+//    createCommandPool();
+//    LOG("Inside vulkan_ui.cpp. Created command pool.");
+//
+//    createCommandBuffers();
+//    LOG("Inside vulkan_ui.cpp. Created command buffers.");
+//
+//    createSyncObjects();
+//    LOG("Inside vulkan_ui.cpp. Created sync objects.");
 }
 
-void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize) {
+void ANativeActivity_onCreate(ANativeActivity *activity, void *savedState, size_t savedStateSize) {
     // Hook the window creation callback
-    activity->callbacks->onNativeWindowCreated = [](ANativeActivity* act, ANativeWindow* window) {
+    activity->callbacks->onNativeWindowCreated = [](ANativeActivity *act, ANativeWindow *window) {
         fill_window_accelerated(window);
     };
 }
