@@ -130,16 +130,20 @@ std::vector<VkSurfaceFormatKHR> querySwapChainFormats(VkPhysicalDevice device, V
     return formats;
 }
 
-std::vector<VkPresentModeKHR> querySwapChainPresentModes(VkPhysicalDevice device, VkSurfaceKHR surface) {}
+std::vector<VkPresentModeKHR> querySwapChainPresentModes(VkPhysicalDevice device, VkSurfaceKHR surface) {
+    std::vector<VkPresentModeKHR> presentModes;
+    uint32_t presentModeCount = 0;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface,&presentModeCount , nullptr);
+    if (presentModeCount != 0) {
+        presentModes.resize(presentModeCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, presentModes.data());
+    }
+    return presentModes;
+}
 
 bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface) {
-    LOG("Inside VulkanSetup.cpp, inside isDeviceSuitable, before capabilities");
     VkSurfaceCapabilitiesKHR capabilities = querySwapChainCapabilities(device, surface);
-
-    LOG("Inside VulkanSetup.cpp, inside isDeviceSuitable, before formats");
     std::vector<VkSurfaceFormatKHR> formats = querySwapChainFormats(device, surface);
-
-    LOG("Inside VulkanSetup.cpp, inside isDeviceSuitable, before presentModes");
     std::vector<VkPresentModeKHR> presentModes = querySwapChainPresentModes(device, surface);
     // 1) Queue families
     uint32_t graphicsIndex, presentIndex;
@@ -246,11 +250,7 @@ void pickPhysicalDevice() {
 
     int bestScore = -1;
     for (auto dev: devices) {
-        LOG("Inside VulkanSetup.cpp, inside, pickPhysicalDevice, inside for, before everything");
-
         if (!isDeviceSuitable(dev, surface)) continue;
-
-        LOG("Inside VulkanSetup.cpp, inside for, before rateDevice");
         int score = rateDevice(dev);
 
         if (score > bestScore) {
@@ -258,11 +258,7 @@ void pickPhysicalDevice() {
             physicalDevice = dev;
 
             // Find graphics & present queues
-            LOG("Inside VulkanSetup.cpp, inside for, inside if, before findQueueFamilies");
-
             findQueueFamilies(dev, surface, graphicsQueueFamily, presentQueueFamily);
-            LOG("Inside VulkanSetup.cpp, inside for, inside if, after findQueueFamilies");
-
         }
 
     }

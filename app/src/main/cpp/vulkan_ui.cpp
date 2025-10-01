@@ -24,10 +24,10 @@ void fill_window_accelerated(ANativeWindow *window) {
     LOG("Vulkan surface created!");
 
 
-//    TODO() Not finished yet
-//    pickPhysicalDevice();
-//    LOG("Inside vulkan_ui.cpp. Physical device picked.");
-//
+    pickPhysicalDevice();
+    LOG("Inside vulkan_ui.cpp. Physical device picked.");
+
+    //    TODO() Not finished yet
 //    createLogicalDevice();
 //    LOG("Inside vulkan_ui.cpp. Logical device created.");
 //
