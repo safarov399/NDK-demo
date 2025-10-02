@@ -28,8 +28,8 @@ void fill_window_accelerated(ANativeWindow *window) {
     LOG("Inside vulkan_ui.cpp. Physical device picked.");
 
     //    TODO() Not finished yet
-//    createLogicalDevice();
-//    LOG("Inside vulkan_ui.cpp. Logical device created.");
+    createLogicalDevice();
+    LOG("Inside vulkan_ui.cpp. Logical device created.");
 //
 //    createSwapchain();
 //    LOG("Inside vulkan_ui.cpp. Created Swapchain.");
