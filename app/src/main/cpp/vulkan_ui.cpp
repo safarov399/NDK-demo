@@ -23,17 +23,16 @@ void fill_window_accelerated(ANativeWindow *window) {
     createSurface(window);
     LOG("Vulkan surface created!");
 
-
     pickPhysicalDevice();
     LOG("Inside vulkan_ui.cpp. Physical device picked.");
 
-    //    TODO() Not finished yet
     createLogicalDevice();
     LOG("Inside vulkan_ui.cpp. Logical device created.");
-//
-//    createSwapchain();
-//    LOG("Inside vulkan_ui.cpp. Created Swapchain.");
-//
+
+    createSwapchain();
+    LOG("Inside vulkan_ui.cpp. Created Swapchain.");
+
+    //    TODO() Not finished yet
 //    createImageViews();
 //    LOG("Inside vulkan_ui.cpp. Created image views.");
 //
